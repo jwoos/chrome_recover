@@ -1,2 +1,2 @@
-# chrome_recover
+# FormSafe
 Form recovery extension

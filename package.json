@@ -1,0 +1,30 @@
+{
+  "name": "FormSafe",
+  "version": "1.0.0",
+  "description": "Form recovery extension",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwoos/formsave.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwoos/formsave/issues"
+  },
+  "homepage": "https://github.com/jwoos/formsave#readme",
+  "private": true,
+  "devDependencies": {
+    "colors": "^1.1.2",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^3.0.1",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-minify": "0.0.14",
+    "gulp-plumber": "^1.1.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^2.2.0"
+  }
+}
