@@ -65,31 +65,23 @@ gulp.task('html:dist', () => {
 });
 
 gulp.task('css:srv', () => {
-	gulp.src(['./src/styles/main.scss'])
+	gulp.src(['./src/style/**/*.scss'])
 		.pipe(plumber())
 		.pipe(sourcemaps.init())
 		.pipe(sass({
 			outputStyle: 'expanded'
 		}).on('error', sass.logError))
 		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest('./tmp/styles/'));
-
-	gulp.src(['./styles/bootstrap.css'])
-		.pipe(plumber())
-		.pipe(gulp.dest('./tmp/styles/'));
+		.pipe(gulp.dest('./tmp/style/'));
 });
 
 gulp.task('css:dist', () => {
-	gulp.src(['./src/styles/main.scss'])
+	gulp.src(['./src/style/**/*.scss'])
 		.pipe(plumber())
 		.pipe(sass({
 			outputStyle: 'compressed'
 		}).on('error', sass.logError))
-		.pipe(gulp.dest('./dist/styles/'));
-
-	gulp.src('./src/styles/bootstrap.css')
-		.pipe(plumber())
-		.pipe(gulp.dest('./dist/styles/'));
+		.pipe(gulp.dest('./dist/style/'));
 });
 
 gulp.task('js:srv', () => {
