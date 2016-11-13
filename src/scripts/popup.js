@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-	getCurrentTabUrl().then((url) => {
+	window.popupUtils.getCurrentTabUrl().then((url) => {
 		document.querySelector('div').textContent = url;
-	})
+	});
 });

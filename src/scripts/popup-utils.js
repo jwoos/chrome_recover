@@ -1,5 +1,7 @@
 'use strict';
 
+window.formsafe = window.formsafe || {};
+
 function getCurrentTabUrl() {
 	return new Promise((resolve, reject) => {
 		let queryInfo = {
@@ -12,9 +14,15 @@ function getCurrentTabUrl() {
 
 			let url = tab.url;
 
-			console.assert(typeof url == 'string', 'tab.url should be a string');
-
-			resolve(url);
+			if (typeof url === 'string') {
+				resolve(url);
+			} else {
+				reject('tab.url should be a string');
+			}
 		});
 	});
 }
+
+window.formsafe.popupUtils = {
+	getCurrentTabUrl: getCurrentTabUrl
+};
