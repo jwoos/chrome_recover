@@ -18,7 +18,7 @@
 		{
 			"matches": ["http://*/*", "https://*/*"],
 			"css": ["style/content.css"],
-			"js": ["scripts/vendor/underscore.js", "scripts/utils.js", "scripts/content.js"],
+			"js": ["scripts/vendor/lodash.js", "scripts/utils.js", "scripts/content.js"],
 			"run_at": "document_end"
 		}
 	],
