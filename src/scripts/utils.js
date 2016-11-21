@@ -48,6 +48,8 @@ function getCurrentTabUrl() {
 }
 
 function storageSet(obj) {
+	console.log('Attempting to save to local storage...');
+
 	return new Promise((resolve, reject) => {
 		chrome.storage.local.set(obj, () => {
 			if (chrome.runtime.lastError) {
@@ -61,6 +63,8 @@ function storageSet(obj) {
 }
 
 function storageGet(vals) {
+	console.log('Attempting to get from local storage...');
+
 	return new Promise((resolve, reject) => {
 		chrome.storage.local.get(vals, (items) => {
 			if (chrome.runtime.lastError) {
@@ -73,15 +77,41 @@ function storageGet(vals) {
 	});
 }
 
-function debounce() {}
+function storageRemove(vals) {
+	console.log('Attempting to remove from local storage...');
 
-function throttle() {}
+	return new Promise((resolve, reject) => {
+		chrome.storage.local.remove(vals, () => {
+			if (chrome.runtime.lastError) {
+				reject(chrome.runtime.lastError);
+				return;
+			}
+
+			resolve();
+		});
+	});
+}
+
+function storageClear() {
+	console.log('Attempting to clear storage...');
+
+	return new Promise((resolve, reject) => {
+		chrome.storage.local.clear(() => {
+			if (chrome.runtime.lastError) {
+				reject(chrome.runtime.lastError);
+				return;
+			}
+
+			resolve();
+		});
+	});
+}
 
 window.formsafe.utils = {
-	debounce: debounce,
-	throttle: throttle,
 	getCurrentTabUrl: getCurrentTabUrl,
 	isVisible: isVisible,
 	storageSet: storageSet,
-	storageGet: storageGet
+	storageGet: storageGet,
+	storageRemove: storageRemove,
+	storageClear: storageClear
 };
