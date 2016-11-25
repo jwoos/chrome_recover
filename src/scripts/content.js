@@ -1,6 +1,6 @@
 'use strict';
 
-const utils = window.formsafe.utils;
+const utils = window.FORMSAFE.utils;
 
 const visibleInputs = Array.from(document.querySelectorAll('input')).filter((elem) => {
 	return utils.isVisible(elem) && (!elem.getAttribute('type') !== 'hidden');

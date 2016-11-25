@@ -1,6 +1,6 @@
 'use strict';
 
-window.formsafe = window.formsafe || {};
+window.FORMSAFE = window.FORMSAFE || {};
 
 function isVisible(elem) {
 	if (!elem || !elem.nodeName) {
@@ -28,15 +28,15 @@ function isVisible(elem) {
 
 function getCurrentTabUrl() {
 	return new Promise((resolve, reject) => {
-		let queryInfo = {
+		const queryInfo = {
 			active: true,
 			currentWindow: true
 		};
 
 		chrome.tabs.query(queryInfo, (tabs) => {
-			let tab = tabs[0];
+			const tab = tabs[0];
 
-			let url = tab.url;
+			const url = tab.url;
 
 			if (typeof url === 'string') {
 				resolve(url);
@@ -107,11 +107,19 @@ function storageClear() {
 	});
 }
 
-window.formsafe.utils = {
+function getDomain(link) {
+	const re = /^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/\n]+)/;
+	const matches = link.match(re);
+
+	return matches[1];
+}
+
+window.FORMSAFE.utils = {
 	getCurrentTabUrl: getCurrentTabUrl,
 	isVisible: isVisible,
 	storageSet: storageSet,
 	storageGet: storageGet,
 	storageRemove: storageRemove,
-	storageClear: storageClear
+	storageClear: storageClear,
+	getDomain: getDomain
 };

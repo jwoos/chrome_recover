@@ -65,7 +65,7 @@ gulp.task('html:dist', () => {
 });
 
 gulp.task('css:srv', () => {
-	gulp.src(['./src/style/**/*.scss'])
+	gulp.src(['./src/style/*.scss'])
 		.pipe(plumber())
 		.pipe(sourcemaps.init())
 		.pipe(sass({
@@ -76,7 +76,7 @@ gulp.task('css:srv', () => {
 });
 
 gulp.task('css:dist', () => {
-	gulp.src(['./src/style/**/*.scss'])
+	gulp.src(['./src/style/*.scss'])
 		.pipe(plumber())
 		.pipe(sass({
 			outputStyle: 'compressed'
