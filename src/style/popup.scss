@@ -1,8 +1,9 @@
+@import 'variables';
+
 @import 'vendor/bootstrap';
 @import 'flex';
 
 body {
-	font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
 	font-size: 100%;
 	white-space: pre;
 	text-overflow: ellipsis;
@@ -11,3 +12,10 @@ body {
 	min-width: 300px;
 }
 
+div[data-hostname] {
+	transition: background-color linear 0.2s;
+
+	&:hover {
+		background-color: $SILVER;
+	}
+}

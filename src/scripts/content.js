@@ -7,13 +7,18 @@ const visibleInputs = Array.from(document.querySelectorAll('input')).filter((ele
 });
 const events = [];
 
+const hostname = window.location.hostname;
+
+const root = Object.create(null);
+
 visibleInputs.forEach((elem, index) => {
-	// save every 1 seconds while typing
 	const fn = _.debounce(() => {
 		const data = Object.create(null);
+		root[hostname] = data;
+
 		data['input-' + index] = elem.value || elem.getAttribute('value');
 
-		utils.storageSet(data).then(() => {
+		utils.storageSet(root).then(() => {
 			console.log('Success saving');
 		}, (e) => {
 			console.error('Error saving:', e);
@@ -24,7 +29,6 @@ visibleInputs.forEach((elem, index) => {
 		});
 	}, 1000);
 
-	// if preventDefault is not used, passive is better for performance
 	const options = {
 		usePassive: true,
 		capture: true
