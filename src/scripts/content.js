@@ -9,25 +9,25 @@ const events = [];
 
 const hostname = window.location.hostname;
 
-const root = Object.create(null);
-
 visibleInputs.forEach((elem, index) => {
 	const fn = _.debounce(() => {
-		const data = Object.create(null);
-		root[hostname] = data;
+		const root = Object.create(null);
 
-		data['input-' + index] = elem.value || elem.getAttribute('value');
+		utils.storageGet([hostname]).then((data) => {
+			root[hostname] = data[hostname] || Object.create(null);
+			root[hostname]['input-' + index] = elem.value || elem.getAttribute('value');
 
-		utils.storageSet(root).then(() => {
-			console.log('Success saving');
-		}, (e) => {
-			console.error('Error saving:', e);
+			return utils.storageSet(root);
+		}).then(() => {
+			console.log('saved');
+
+			utils.storageGet(null).then((d) => {
+				console.log(d);
+			});
+		}).catch((e) =>{
+			console.log(e);
 		});
-
-		utils.storageGet(null).then((items) => {
-			console.log(items);
-		});
-	}, 1000);
+	}, 750);
 
 	const options = {
 		usePassive: true,

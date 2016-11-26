@@ -34,9 +34,7 @@ function getCurrentTabUrl() {
 		};
 
 		chrome.tabs.query(queryInfo, (tabs) => {
-			const tab = tabs[0];
-
-			const url = tab.url;
+			const url = tabs[0].url;
 
 			if (typeof url === 'string') {
 				resolve(url);
@@ -52,12 +50,7 @@ function storageSet(obj) {
 
 	return new Promise((resolve, reject) => {
 		chrome.storage.local.set(obj, () => {
-			if (chrome.runtime.lastError) {
-				reject(chrome.runtime.lastError);
-				return;
-			}
-
-			resolve();
+			chrome.runtime.lastError ? reject(chrome.runtime.lastError) : resolve();
 		});
 	});
 }
@@ -67,12 +60,7 @@ function storageGet(vals) {
 
 	return new Promise((resolve, reject) => {
 		chrome.storage.local.get(vals, (items) => {
-			if (chrome.runtime.lastError) {
-				reject(chrome.runtime.lastError);
-				return;
-			}
-
-			resolve(items);
+			chrome.runtime.lastError ? reject(chrome.runtime.lastError) : resolve(items);
 		});
 	});
 }
@@ -82,12 +70,7 @@ function storageRemove(vals) {
 
 	return new Promise((resolve, reject) => {
 		chrome.storage.local.remove(vals, () => {
-			if (chrome.runtime.lastError) {
-				reject(chrome.runtime.lastError);
-				return;
-			}
-
-			resolve();
+			chrome.runtime.lastError ? reject(chrome.runtime.lastError) : resolve();
 		});
 	});
 }
@@ -97,12 +80,7 @@ function storageClear() {
 
 	return new Promise((resolve, reject) => {
 		chrome.storage.local.clear(() => {
-			if (chrome.runtime.lastError) {
-				reject(chrome.runtime.lastError);
-				return;
-			}
-
-			resolve();
+			chrome.runtime.lastError ? reject(chrome.runtime.lastError) : resolve();
 		});
 	});
 }

@@ -21,7 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			// doesn't update properly
 			div.addEventListener('click', () => {
-				delete data[hostname];
+				data[hostname] = null;
+
+				console.log(data);
 
 				utils.storageSet(data).then(() => {
 					console.log(data);
