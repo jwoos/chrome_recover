@@ -9,3 +9,12 @@ Form recovery extension
 	- Keyed at the root level by hostname and by index in which it is added for children - again this needs tweaking.
 		- Ideally a hash generated from attributes.
 		- Having the hostname be the top level is nice for working with the data per site but it requires a storage retrieval and then a write of the whole object. There must be a better way to do this.
+
+### Data
+```json
+{
+	"www.google.com": {
+		"form-0": "I am some text!"
+	}
+}
+```

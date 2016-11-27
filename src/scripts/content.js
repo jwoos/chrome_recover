@@ -3,19 +3,26 @@
 const utils = window.FORMSAFE.utils;
 
 const visibleInputs = Array.from(document.querySelectorAll('input')).filter((elem) => {
-	return utils.isVisible(elem) && (!elem.getAttribute('type') !== 'hidden');
+	return utils.isVisible(elem) && (elem.getAttribute('type') !== 'hidden');
 });
+
+const visibleTextAreas = Array.from(document.querySelectorAll('textarea')).filter((elem) => {
+	return utils.isVisible(elem) && (elem.getAttribute('type') !== 'hidden');
+});
+
+const allForms = Array.prototype.concat(visibleInputs, visibleTextAreas);
+
 const events = [];
 
 const hostname = window.location.hostname;
 
-visibleInputs.forEach((elem, index) => {
+allForms.forEach((elem, index) => {
 	const fn = _.debounce(() => {
 		const root = Object.create(null);
 
 		utils.storageGet([hostname]).then((data) => {
 			root[hostname] = data[hostname] || Object.create(null);
-			root[hostname]['input-' + index] = elem.value || elem.getAttribute('value');
+			root[hostname]['form-' + index] = elem.value || elem.getAttribute('value');
 
 			return utils.storageSet(root);
 		}).then(() => {
