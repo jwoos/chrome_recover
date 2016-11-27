@@ -3,11 +3,19 @@
 const utils = window.FORMSAFE.utils;
 
 const visibleInputs = Array.from(document.querySelectorAll('input')).filter((elem) => {
-	return utils.isVisible(elem) && (elem.getAttribute('type') !== 'hidden');
+	const config = {
+		type: ['hidden', 'password', 'radio', 'file', 'reset']
+	};
+
+	return utils.isVisible(elem) && utils.checkAttributes(elem, config);
 });
 
 const visibleTextAreas = Array.from(document.querySelectorAll('textarea')).filter((elem) => {
-	return utils.isVisible(elem) && (elem.getAttribute('type') !== 'hidden');
+	const config = {
+		readonly: ['', 'true']
+	};
+
+	return utils.isVisible(elem) && utils.checkAttributes(elem, config);
 });
 
 const allForms = Array.prototype.concat(visibleInputs, visibleTextAreas);

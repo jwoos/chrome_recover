@@ -92,12 +92,38 @@ function getDomain(link) {
 	return matches[1];
 }
 
+/*
+ * {
+ *  ATTRIBUTE_NAME: []
+ * }
+ */
+function checkAttributes(elem, config) {
+	let status = true;
+
+	const attributes = Object.keys(config);
+
+	for (let attr of attributes) {
+		const blacklist = config[attr] || [];
+		const elemAttr = elem.getAttribute(attr);
+
+		if (blacklist.includes(elemAttr)) {
+			status = false;
+			break;
+		}
+	}
+
+	return status;
+}
+
 window.FORMSAFE.utils = {
 	getCurrentTabUrl: getCurrentTabUrl,
-	isVisible: isVisible,
+
 	storageSet: storageSet,
 	storageGet: storageGet,
 	storageRemove: storageRemove,
 	storageClear: storageClear,
-	getDomain: getDomain
+
+	getDomain: getDomain,
+	isVisible: isVisible,
+	checkAttributes: checkAttributes
 };
