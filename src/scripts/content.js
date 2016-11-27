@@ -4,7 +4,7 @@ const utils = window.FORMSAFE.utils;
 
 const visibleInputs = Array.from(document.querySelectorAll('input')).filter((elem) => {
 	const config = {
-		type: ['hidden', 'password', 'radio', 'file', 'reset']
+		type: ['hidden', 'password', 'radio', 'file', 'reset', 'button']
 	};
 
 	return utils.isVisible(elem) && utils.checkAttributes(elem, config);
@@ -18,7 +18,15 @@ const visibleTextAreas = Array.from(document.querySelectorAll('textarea')).filte
 	return utils.isVisible(elem) && utils.checkAttributes(elem, config);
 });
 
-const allForms = Array.prototype.concat(visibleInputs, visibleTextAreas);
+const visibleEditableElements = Array.from(document.querySelectorAll('div[contenteditable]')).filter((elem) => {
+	const config = {
+		contenteditable: [null, 'false']
+	};
+
+	return utils.isVisible(elem) && utils.checkAttributes(elem, config);
+});
+
+const allForms = Array.prototype.concat(visibleInputs, visibleTextAreas, visibleEditableElements);
 
 const events = [];
 
@@ -30,15 +38,11 @@ allForms.forEach((elem, index) => {
 
 		utils.storageGet([hostname]).then((data) => {
 			root[hostname] = data[hostname] || Object.create(null);
-			root[hostname]['form-' + index] = elem.value || elem.getAttribute('value');
+			root[hostname]['form-' + index] = elem.isContentEditable ? elem.textContent : elem.value || elem.getAttribute('value');
 
 			return utils.storageSet(root);
 		}).then(() => {
 			console.log('saved');
-
-			utils.storageGet(null).then((d) => {
-				console.log(d);
-			});
 		}).catch((e) =>{
 			console.log(e);
 		});
@@ -64,3 +68,5 @@ allForms.forEach((elem, index) => {
 utils.storageGet(null).then((items) => {
 	console.log('storage:', items);
 });
+
+//utils.storageClear();
