@@ -2,8 +2,6 @@
 
 'use strict';
 
-// DON'T USE ES6 FEATURES
-
 const Jasmine = require('jasmine');
 const jasmine = new Jasmine();
 const specReporter = require('jasmine-spec-reporter');
@@ -16,6 +14,8 @@ let suite = [
 ].filter((elem) => {
 	return !!elem;
 });
+
+jasmine.jasmine.getEnv().clearReporters();
 
 jasmine.loadConfig({
 	spec_dir: 'test',
