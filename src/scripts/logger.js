@@ -4,6 +4,7 @@ window.FORMSAFE = window.FORMSAFE || {};
 
 window.FORMSAFE.logs = [];
 
+/* eslint-disable no-console */
 function log(...args) {
 	console.log('FORMSAFE [LOG]:', ...args);
 	window.FORMSAFE.logs.push([new Date(), ...args]);
@@ -31,6 +32,7 @@ function trace() {
 function memory() {
 	console.log(console.memory);
 }
+/* eslint-enable no-console */
 
 window.FORMSAFE.logger = {
 	log: log,
