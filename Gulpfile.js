@@ -10,7 +10,6 @@ const del = require('del');
 const eslint = require('gulp-eslint');
 const imagemin = require('gulp-imagemin');
 const plumber = require('gulp-plumber');
-const polybuild = require('polybuild');
 const pug = require('gulp-pug');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
