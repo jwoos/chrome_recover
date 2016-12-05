@@ -33,8 +33,13 @@ for file in "${tobuild[@]}"; do
 	vulcanize --inline-css --inline-scripts --strip-comments --exclude "src/scripts/" "${from}/${file}.html" |\
 		crisper --html "${to}/${file}.html" --js "${to}/${file}.js"
 
-	# hack to get rid of the defer that crisper puts in and put it before other script tags
-	sed -i -e 's/<script src="\w\+.js\" defer=""><\/script>//g' "${to}/${file}.html"
-	sed -i -e 's/\(<script src="scripts\/vendor\/lodash.js"><\/script>\)/<script src="'$file'.js"><\/script>\1/g' "${to}/${file}.html"
+	temp=("${PIPESTATUS[@]}")
+	if [ ${temp[0]} -ne 0 ]; then
+		echo "VULCANIZE FAILED WITH STATUS ${temp[0]}"
+		exit 1
+	elif [ ${temp[1]} -ne 0 ]; then
+		echo "CRISPER FAILED WITH STATUS ${temp[0]}"
+		exit 1
+	fi
 done
 

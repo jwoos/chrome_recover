@@ -75,7 +75,7 @@ gulp.task('images:dist', () => {
 gulp.task('polybuild:srv', () => {
 	return new Promise((resolve, reject) => {
 		childProcess.exec('scripts/build.sh all srv', (e) => {
-			e ? reject(new Error(e)) : resolve();
+			e ? reject(e) : resolve();
 		});
 	});
 });
@@ -84,7 +84,7 @@ gulp.task('polybuild:srv', () => {
 gulp.task('polybuild:dist', () => {
 	return new Promise((resolve, reject) => {
 		childProcess.exec('scripts/build.sh all dist', (e) => {
-			e ? reject(new Error(e)) : resolve();
+			e ? reject(e) : resolve();
 		});
 	});
 });
