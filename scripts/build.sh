@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+if ! type vulcanize > /dev/null; then
+	echo "MISSING VULCANIZE - install with 'npm install -g vulcanize'"
+	exit 1
+elif ! type crisper > /dev/null; then
+	echo "MISSING CRISPER - install with 'npm install -g crisper'"
+	exit 1
+fi
+
 tobuild=""
 env=""
 from="src"
