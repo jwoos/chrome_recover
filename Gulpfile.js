@@ -1,17 +1,19 @@
 'use strict';
 
-const childProcess = require('child_process');
-
 const gulp = require('gulp');
 
-const babel = require('gulp-babel');
-const colors = require('colors/safe');
-const del = require('del');
-const eslint = require('gulp-eslint');
-const imagemin = require('gulp-imagemin');
-const plumber = require('gulp-plumber');
-const pug = require('gulp-pug');
-const sass = require('gulp-sass');
+const childProcess = require('child_process');
+const fs           = require('fs');
+const path         = require('path');
+
+const babel      = require('gulp-babel');
+const colors     = require('colors/safe');
+const del        = require('del');
+const eslint     = require('gulp-eslint');
+const imagemin   = require('gulp-imagemin');
+const plumber    = require('gulp-plumber');
+const pug        = require('gulp-pug');
+const sass       = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('init:srv', () => {
@@ -135,6 +137,28 @@ gulp.task('copy:dist', () => {
 	return gulp.src(['./manifest.json'])
 		.pipe(plumber())
 		.pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('vendor:js', () => {
+	const paths = [
+		'webcomponentsjs/webcomponents-lite.js',
+		'lodash/lodash.js'
+	];
+
+	return Promise.all(paths.map((p) => {
+		return new Promise((resolve, reject) => {
+			const writeStream = fs.createWriteStream(`src/scripts/vendor/${path.basename(p)}`);
+			writeStream.on('close', () => {
+				resolve();
+			});
+
+			fs.createReadStream(`bower_components/${p}`).pipe(writeStream);
+
+			setTimeout(() => {
+				reject(new Error('Task timed out'));
+			}, 2500)
+		});
+	}));
 });
 
 gulp.task('_srv', gulp.parallel('copy:srv', 'polybuild:srv', 'css:srv', 'js:srv', 'images:srv', 'assets:srv'));
