@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "node"
   - "6"
-install:
-  - npm install -g bower
-  - npm install
+before_script:
+  - yarn global add bower
   - bower install
+cache: yarn

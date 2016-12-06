@@ -1,9 +1,10 @@
 {
   "name": "formsafe",
   "main": "src/index.html",
+  "private": true,
   "dependencies": {
     "polymer": "Polymer/polymer#^1.7.0",
-    "lodash": "^4.17.2",
+    "lodash": "^4.0.0",
     "underscore": "^1.8.3",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
     "bootstrap": "v4.0.0-alpha.5"
@@ -11,5 +12,7 @@
   "devDependencies": {
     "web-component-tester": "^4.0.0"
   },
-  "private": true
+  "resolutions": {
+    "lodash": "^4.0.0"
+  }
 }
