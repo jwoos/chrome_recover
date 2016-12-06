@@ -1,40 +1,42 @@
 {
-	"name": "FormSafe",
-	"version": "1.0.0",
-	"description": "Form recovery extension",
-	"scripts": {
-		"pretest": "./scripts/pretest.sh",
-		"test": "./scripts/test.sh",
-		"posttest": "./scripts/posttest.sh"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/jwoos/formsave.git"
-	},
-	"author": "",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/jwoos/formsave/issues"
-	},
-	"homepage": "https://github.com/jwoos/formsave#readme",
-	"private": true,
-	"devDependencies": {
-		"babili": "0.0.8",
-		"colors": "^1.1.2",
-		"coveralls": "^2.11.15",
-		"del": "^2.2.2",
-		"gulp": "^3.9.1",
-		"gulp-babel": "^6.1.2",
-		"gulp-eslint": "^3.0.1",
-		"gulp-imagemin": "^3.1.1",
-		"gulp-plumber": "^1.1.0",
-		"gulp-pug": "^3.1.0",
-		"gulp-sass": "^2.3.2",
-		"gulp-sourcemaps": "^2.2.0",
-		"gulp-uglify": "^2.0.0",
-		"istanbul": "^0.4.5",
-		"jasmine": "^2.5.2",
-		"jasmine-spec-reporter": "^2.7.0",
-		"jasmine-terminal-reporter": "^1.0.2"
-	}
+  "name": "FormSafe",
+  "version": "1.0.0",
+  "description": "Form recovery extension",
+  "scripts": {
+    "pretest": "./scripts/pretest.sh",
+    "test": "./scripts/test.sh",
+    "posttest": "./scripts/posttest.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwoos/formsave.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwoos/formsave/issues"
+  },
+  "homepage": "https://github.com/jwoos/formsave#readme",
+  "private": true,
+  "devDependencies": {
+    "babili": "0.0.8",
+    "colors": "^1.1.2",
+    "coveralls": "^2.11.15",
+    "crisper": "^2.0.2",
+    "del": "^2.2.2",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-eslint": "^3.0.1",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-pug": "^3.1.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-uglify": "^2.0.0",
+    "istanbul": "^0.4.5",
+    "jasmine": "^2.5.2",
+    "jasmine-spec-reporter": "^2.7.0",
+    "jasmine-terminal-reporter": "^1.0.2",
+    "vulcanize": "^1.14.12"
+  }
 }

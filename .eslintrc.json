@@ -31,7 +31,8 @@
 		]
 	},
 	"globals": {
-		"_": true,
-		"chrome": false
+		"_": false,
+		"chrome": false,
+		"Polymer": false
 	}
 }
