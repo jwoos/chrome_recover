@@ -6,3 +6,6 @@ before_script:
   - yarn global add bower
   - bower install
 cache: yarn
+branches:
+  only:
+    - master
