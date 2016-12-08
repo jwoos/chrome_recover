@@ -8,13 +8,14 @@
 		"outDir": "./tmp/"
 	},
 	"include": [
-		"./srv/**/*"
+		"./src/**/*"
 	],
 	"exclude": [
 		"node_modules",
 		"bower_components"
 	],
 	"awesomeTypescriptLoaderOptions": {
-		"transpileOnly": true
+		"transpileOnly": true,
+		"emitRequireType": true
 	}
 }

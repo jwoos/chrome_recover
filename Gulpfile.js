@@ -222,7 +222,9 @@ gulp.task('webpack:srv', () => {
 					},
 					{
 						test: /\.ts$/,
-						use: 'awesome-typescript-loader'
+						use: 'ts-loader?transpileOnly=true'
+						// FIXME awesome-ts-loader hangs, use ts-loader for now
+						// use: 'awesome-typescript-loader'
 					},
 					{
 						test: /\.js$/,
@@ -240,7 +242,7 @@ gulp.task('webpack:srv', () => {
 				]
 			},
 			plugins: [
-				new tsPathsPlugin(),
+				//new tsPathsPlugin(),
 				new wp.LoaderOptionsPlugin({
 					minimize: true,
 					debug: false
@@ -302,7 +304,9 @@ gulp.task('webpack:dist', () => {
 					},
 					{
 						test: /\.ts$/,
-						use: 'awesome-typescript-loader'
+						use: 'ts-loader?transpileOnly=true'
+						// FIXME awesome-ts-loader hangs, use ts-loader for now
+						// use: 'awesome-typescript-loader'
 					},
 					{
 						test: /\.js$/,
@@ -320,7 +324,7 @@ gulp.task('webpack:dist', () => {
 				]
 			},
 			plugins: [
-				new tsPathsPlugin(),
+				//new tsPathsPlugin(),
 				new wp.LoaderOptionsPlugin({
 					minimize: true,
 					debug: false
