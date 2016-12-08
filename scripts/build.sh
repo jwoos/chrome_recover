@@ -30,7 +30,7 @@ elif [[ $2 == "dist" ]]; then
 fi
 
 for file in "${tobuild[@]}"; do
-	vulcanize --inline-css --inline-scripts --strip-comments --exclude "src/scripts/" "${from}/${file}.html" |\
+	vulcanize --inline-scripts --strip-comments --exclude "src/scripts/" "${from}/${file}.html" |\
 		crisper --html "${to}/${file}.html" --js "${to}/${file}.js"
 
 	temp=("${PIPESTATUS[@]}")

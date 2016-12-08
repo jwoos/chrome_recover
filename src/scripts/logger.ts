@@ -1,5 +1,3 @@
-'use strict';
-
 const logs: Array<Array<any>> = [];
 
 export const log = (...args: Array<any>): void => {

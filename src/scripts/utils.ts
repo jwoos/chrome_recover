@@ -1,5 +1,3 @@
-'use strict';
-
 export const isVisible = (elem: Element): boolean => {
 	if (!elem || !elem.nodeName) {
 		return false;
