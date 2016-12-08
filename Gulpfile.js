@@ -18,7 +18,7 @@ const sass       = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const ts         = require('gulp-typescript');
 const tslint     = require('gulp-tslint');
-const webpack    = require('gulp-webpack');
+const webpack    = require('webpack-stream');
 const wp         = require('webpack');
 
 const tsProject     = ts.createProject('tsconfig.json');
