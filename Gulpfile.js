@@ -15,6 +15,10 @@ const plumber    = require('gulp-plumber');
 const pug        = require('gulp-pug');
 const sass       = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
+const ts         = require('gulp-typescript');
+const tslint     = require('gulp-tslint');
+
+const tsProject = ts.createProject('tsconfig.json');
 
 gulp.task('init:srv', () => {
 	return new Promise((resolve, reject) => {
@@ -40,13 +44,15 @@ gulp.task('clean:dist', () => {
 	return del(['dist/**/*']);
 });
 
-gulp.task('eslint', () => {
-	return gulp.src(['./src/scripts/*.js'])
+gulp.task('tslint', () => {
+	return gulp.src(['./src/**/*.ts'])
 		.pipe(plumber())
-		.pipe(eslint({
-			eslint: '.eslintrc.json'
+		.pipe(tslint({
+			formatter: 'verbose'
 		}))
-		.pipe(eslint.format());
+		.pipe(tslint.report({
+			emitError: false
+		}));
 });
 
 gulp.task('assets:srv', () => {
@@ -107,6 +113,23 @@ gulp.task('js:dist', () => {
 		.pipe(gulp.dest('./dist/scripts/'));
 });
 
+gulp.task('ts:srv', () => {
+	return gulp.src(['./src/scripts/**/*.ts'])
+		.pipe(plumber())
+		.pipe(tsProject())
+		.js.pipe(gulp.dest('./tmp/scripts/'));
+});
+
+gulp.task('ts:dist', () => {
+	return gulp.src(['./src/scripts/**/*.js'])
+		.pipe(plumber())
+		.pipe(tsProject())
+		.js.pipe(babel({
+			presets: ['babili']
+		}))
+		.pipe(gulp.dest('./dist/scripts/'));
+});
+
 gulp.task('css:srv', () => {
 	return gulp.src(['./src/style/*.scss'])
 		.pipe(plumber())
@@ -161,12 +184,12 @@ gulp.task('vendor:js', () => {
 	}));
 });
 
-gulp.task('_srv', gulp.parallel('copy:srv', 'polybuild:srv', 'css:srv', 'js:srv', 'images:srv', 'assets:srv'));
-gulp.task('srv', gulp.series('init:srv', 'clean:srv', 'eslint', '_srv'));
+gulp.task('_srv', gulp.parallel('copy:srv', 'polybuild:srv', 'css:srv', 'js:srv', 'ts:srv', 'images:srv', 'assets:srv'));
+gulp.task('srv', gulp.series('init:srv', 'clean:srv', 'tslint', '_srv'));
 gulp.task('default', gulp.series('srv'));
 
-gulp.task('_dist', gulp.parallel('copy:dist', 'polybuild:dist', 'css:dist', 'js:dist', 'images:dist', 'assets:dist'));
-gulp.task('dist', gulp.series('init:dist', 'clean:dist', 'eslint', '_dist'));
+gulp.task('_dist', gulp.parallel('copy:dist', 'polybuild:dist', 'css:dist', 'js:dist', 'ts:dist', 'images:dist', 'assets:dist'));
+gulp.task('dist', gulp.series('init:dist', 'clean:dist', 'tslint', '_dist'));
 
 // TODO html minifier
 // TODO js minifier for polybuild code
@@ -188,4 +211,13 @@ gulp.task('html:dist', () => {
 		.pipe(plumber())
 		.pipe(pug())
 		.pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('eslint', () => {
+	return gulp.src(['./src/scripts/*.js'])
+		.pipe(plumber())
+		.pipe(eslint({
+			eslint: '.eslintrc.json'
+		}))
+		.pipe(eslint.format());
 });
