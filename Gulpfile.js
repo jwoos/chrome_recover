@@ -166,25 +166,30 @@ gulp.task('copy:dist', () => {
 		.pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('vendor:js', () => {
+gulp.task('vendor', () => {
 	const paths = [
 		'webcomponentsjs/webcomponents-lite.js'
 	];
 
-	return Promise.all(paths.map((p) => {
-		return new Promise((resolve, reject) => {
-			const writeStream = fs.createWriteStream(`src/scripts/vendor/${path.basename(p)}`);
+	return Promise.all([
+		new Promise((resolve, reject) => {
+			const writeStream = fs.createWriteStream('src/scripts/vendor/webcomponents-lite.js');
 			writeStream.on('close', () => {
 				resolve();
 			});
 
-			fs.createReadStream(`bower_components/${p}`).pipe(writeStream);
+			fs.createReadStream('bower_components/webcomponentsjs/webcomponents-lite.js').pipe(writeStream);
 
 			setTimeout(() => {
 				reject(new Error('Task timed out'));
-			}, 2500)
-		});
-	}));
+			}, 2500);
+		}),
+		new Promise((resolve, reject) => {
+			childProcess.exec('vulcanize --inline-scripts --strip-comments bower_components/polymer/polymer.html | crisper --html /dev/null --js src/scripts/vendor/polymer.js --only-split', (e) => {
+				e ? reject(e) : resolve();
+			});
+		})
+	]);
 });
 
 gulp.task('webpack:srv', () => {
