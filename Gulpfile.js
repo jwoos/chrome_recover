@@ -277,7 +277,7 @@ gulp.task('webpack:dist', () => {
 				'popup': './src/scripts/popup.ts'
 			},
 			context: path.resolve(__dirname),
-			devtool: 'source-map',
+			devtool: false,
 			resolve: {
 				extensions: ['.js', '.ts'],
 				modules: [path.resolve(__dirname, 'src'), 'node_modules']
