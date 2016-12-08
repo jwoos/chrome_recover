@@ -29,9 +29,12 @@ elif [[ $2 == "dist" ]]; then
 	to="dist"
 fi
 
+# try to create path
+mkdir -p ${to}/scripts/
+
 for file in "${tobuild[@]}"; do
-	vulcanize --inline-css --inline-scripts --strip-comments --exclude "src/scripts/" "${from}/${file}.html" |\
-		crisper --html "${to}/${file}.html" --js "${to}/${file}.js"
+	vulcanize --inline-scripts --strip-comments --exclude "src/scripts/" "${from}/${file}.html" |\
+		crisper --html "${to}/${file}.html" --js "${to}/scripts/${file}.csp.js" --only-split
 
 	temp=("${PIPESTATUS[@]}")
 	if [ ${temp[0]} -ne 0 ]; then

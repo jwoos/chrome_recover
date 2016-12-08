@@ -6,6 +6,7 @@ const childProcess = require('child_process');
 const fs           = require('fs');
 const path         = require('path');
 
+const atl        = require('awesome-typescript-loader');
 const babel      = require('gulp-babel');
 const colors     = require('colors/safe');
 const del        = require('del');
@@ -15,6 +16,13 @@ const plumber    = require('gulp-plumber');
 const pug        = require('gulp-pug');
 const sass       = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
+const ts         = require('gulp-typescript');
+const tslint     = require('gulp-tslint');
+const webpack    = require('webpack-stream');
+const wp         = require('webpack');
+
+const tsProject     = ts.createProject('tsconfig.json');
+const tsPathsPlugin = atl.TsConfigPathsPlugin;
 
 gulp.task('init:srv', () => {
 	return new Promise((resolve, reject) => {
@@ -40,13 +48,15 @@ gulp.task('clean:dist', () => {
 	return del(['dist/**/*']);
 });
 
-gulp.task('eslint', () => {
-	return gulp.src(['./src/scripts/*.js'])
+gulp.task('tslint', () => {
+	return gulp.src(['./src/**/*.ts'])
 		.pipe(plumber())
-		.pipe(eslint({
-			eslint: '.eslintrc.json'
+		.pipe(tslint({
+			formatter: 'verbose'
 		}))
-		.pipe(eslint.format());
+		.pipe(tslint.report({
+			emitError: false
+		}));
 });
 
 gulp.task('assets:srv', () => {
@@ -107,6 +117,23 @@ gulp.task('js:dist', () => {
 		.pipe(gulp.dest('./dist/scripts/'));
 });
 
+gulp.task('ts:srv', () => {
+	return gulp.src(['./src/scripts/**/*.ts'])
+		.pipe(plumber())
+		.pipe(tsProject())
+		.js.pipe(gulp.dest('./tmp/scripts/'));
+});
+
+gulp.task('ts:dist', () => {
+	return gulp.src(['./src/scripts/**/*.js'])
+		.pipe(plumber())
+		.pipe(tsProject())
+		.js.pipe(babel({
+			presets: ['babili']
+		}))
+		.pipe(gulp.dest('./dist/scripts/'));
+});
+
 gulp.task('css:srv', () => {
 	return gulp.src(['./src/style/*.scss'])
 		.pipe(plumber())
@@ -139,34 +166,205 @@ gulp.task('copy:dist', () => {
 		.pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('vendor:js', () => {
+gulp.task('vendor', () => {
 	const paths = [
-		'webcomponentsjs/webcomponents-lite.js',
-		'lodash/lodash.js'
+		'webcomponentsjs/webcomponents-lite.js'
 	];
 
-	return Promise.all(paths.map((p) => {
-		return new Promise((resolve, reject) => {
-			const writeStream = fs.createWriteStream(`src/scripts/vendor/${path.basename(p)}`);
+	return Promise.all([
+		new Promise((resolve, reject) => {
+			const writeStream = fs.createWriteStream('src/scripts/vendor/webcomponents-lite.js');
 			writeStream.on('close', () => {
 				resolve();
 			});
 
-			fs.createReadStream(`bower_components/${p}`).pipe(writeStream);
+			fs.createReadStream('bower_components/webcomponentsjs/webcomponents-lite.js').pipe(writeStream);
 
 			setTimeout(() => {
 				reject(new Error('Task timed out'));
-			}, 2500)
-		});
-	}));
+			}, 2500);
+		}),
+		new Promise((resolve, reject) => {
+			childProcess.exec('vulcanize --inline-scripts --strip-comments bower_components/polymer/polymer.html | crisper --html /dev/null --js src/scripts/vendor/polymer.js --only-split', (e) => {
+				e ? reject(e) : resolve();
+			});
+		})
+	]);
 });
 
-gulp.task('_srv', gulp.parallel('copy:srv', 'polybuild:srv', 'css:srv', 'js:srv', 'images:srv', 'assets:srv'));
-gulp.task('srv', gulp.series('init:srv', 'clean:srv', 'eslint', '_srv'));
+gulp.task('webpack:srv', () => {
+	return gulp.src(['./src/scripts/*.ts'])
+		.pipe(plumber())
+		.pipe(webpack({
+			entry: {
+				'content': './src/scripts/content.ts',
+				'options': './src/scripts/options.ts',
+				'popup': './src/scripts/popup.ts'
+			},
+			context: path.resolve(__dirname),
+			devtool: 'source-map',
+			resolve: {
+				extensions: ['.js', '.ts'],
+				modules: [path.resolve(__dirname, 'src'), 'node_modules']
+			},
+			resolveLoader: {
+				modules: ['node_modules']
+			},
+			output: {
+				filename: '[name].js'
+			},
+			target: 'web',
+			module: {
+				rules: [
+					{
+						test: /\.json$/,
+						use: 'json-loader'
+					},
+					{
+						test: /\.ts$/,
+						use: 'ts-loader?transpileOnly=true'
+						// FIXME awesome-ts-loader hangs, use ts-loader for now
+						// use: 'awesome-typescript-loader'
+					},
+					{
+						test: /\.js$/,
+						use: [
+							{
+								loader: 'babel-loader',
+								options: {
+									presets: ['babili'],
+									cacheDirectory: ['.tmp/babel/']
+								}
+							}
+						],
+						exclude: /(node_modules|bower_components)/
+					}
+				]
+			},
+			plugins: [
+				//new tsPathsPlugin(),
+				new wp.LoaderOptionsPlugin({
+					minimize: true,
+					debug: false
+				})
+			],
+			stats: {
+				//assets: false,
+				//assetsSort: "field",
+				cached: true,
+				children: true,
+				chunks: true,
+				chunkModules: true,
+				chunkOrigins: true,
+				//chunksSort: "field",
+				//context: "../src/",
+				errors: true,
+				errorDetails: true,
+				hash: true,
+				modules: true,
+				//modulesSort: "field",
+				//publicPath: true,
+				reasons: true,
+				source: true,
+				timings: true,
+				version: true,
+				warnings: true
+			}
+		}, wp))
+		.pipe(gulp.dest('./tmp/scripts/'));
+});
+
+gulp.task('webpack:dist', () => {
+	return gulp.src(['./src/scripts/*.ts'])
+		.pipe(plumber())
+		.pipe(webpack({
+			entry: {
+				'content': './src/scripts/content.ts',
+				'options': './src/scripts/options.ts',
+				'popup': './src/scripts/popup.ts'
+			},
+			context: path.resolve(__dirname),
+			devtool: false,
+			resolve: {
+				extensions: ['.js', '.ts'],
+				modules: [path.resolve(__dirname, 'src'), 'node_modules']
+			},
+			resolveLoader: {
+				modules: ['node_modules']
+			},
+			output: {
+				filename: '[name].js'
+			},
+			target: 'web',
+			module: {
+				rules: [
+					{
+						test: /\.json$/,
+						use: 'json-loader'
+					},
+					{
+						test: /\.ts$/,
+						use: 'ts-loader?transpileOnly=true'
+						// FIXME awesome-ts-loader hangs, use ts-loader for now
+						// use: 'awesome-typescript-loader'
+					},
+					{
+						test: /\.js$/,
+						use: [
+							{
+								loader: 'babel-loader',
+								options: {
+									presets: ['babili'],
+									cacheDirectory: ['.tmp/babel/']
+								}
+							}
+						],
+						exclude: /(node_modules|bower_components)/
+					}
+				]
+			},
+			plugins: [
+				//new tsPathsPlugin(),
+				new wp.LoaderOptionsPlugin({
+					minimize: true,
+					debug: false
+				})
+			],
+			stats: {
+				//assets: false,
+				//assetsSort: "field",
+				cached: true,
+				children: true,
+				chunks: true,
+				chunkModules: true,
+				chunkOrigins: true,
+				//chunksSort: "field",
+				//context: "../src/",
+				errors: true,
+				errorDetails: true,
+				hash: true,
+				modules: true,
+				//modulesSort: "field",
+				//publicPath: true,
+				reasons: true,
+				source: true,
+				timings: true,
+				version: true,
+				warnings: true
+			}
+		}, wp))
+		.pipe(babel({
+			presets: ['babili']
+		}))
+		.pipe(gulp.dest('./dist/scripts/'));
+});
+
+gulp.task('_srv', gulp.parallel('copy:srv', 'polybuild:srv', 'webpack:srv', 'css:srv', 'js:srv', 'ts:srv', 'images:srv', 'assets:srv'));
+gulp.task('srv', gulp.series('init:srv', 'clean:srv', 'tslint', '_srv'));
 gulp.task('default', gulp.series('srv'));
 
-gulp.task('_dist', gulp.parallel('copy:dist', 'polybuild:dist', 'css:dist', 'js:dist', 'images:dist', 'assets:dist'));
-gulp.task('dist', gulp.series('init:dist', 'clean:dist', 'eslint', '_dist'));
+gulp.task('_dist', gulp.parallel('copy:dist', 'polybuild:dist', 'webpack:dist', 'css:dist', 'js:dist', 'ts:dist', 'images:dist', 'assets:dist'));
+gulp.task('dist', gulp.series('init:dist', 'clean:dist', 'tslint', '_dist'));
 
 // TODO html minifier
 // TODO js minifier for polybuild code
@@ -188,4 +386,13 @@ gulp.task('html:dist', () => {
 		.pipe(plumber())
 		.pipe(pug())
 		.pipe(gulp.dest('./dist/'));
+});
+
+gulp.task('eslint', () => {
+	return gulp.src(['./src/scripts/*.js'])
+		.pipe(plumber())
+		.pipe(eslint({
+			eslint: '.eslintrc.json'
+		}))
+		.pipe(eslint.format());
 });
