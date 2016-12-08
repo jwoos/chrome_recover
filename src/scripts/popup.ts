@@ -1,6 +1,7 @@
 'use strict';
 
-const utils = window.FORMSAFE.utils;
+import * as _ from 'lodash';
+import * as utils from './utils';
 
 document.addEventListener('DOMContentLoaded', () => {
 	const body = document.querySelector('body');
@@ -12,8 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	utils.storageGet(null).then((data) => {
 		const hostnames = Object.keys(data);
 
-		for (let i = 0; i < hostnames.length; i++) {
-			const hostname = hostnames[i];
+		for (let hostname of hostnames) {
 			const hostData = data[hostname];
 			const div = document.createElement('div');
 			div.setAttribute('data-hostname', hostname);
@@ -30,12 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
 					console.log('Deleted hostname!');
 				});
 			}, {
-				passive: true,
 				capture: true,
-				once: true
+				once: true,
+				passive: true,
 			});
 
-			body.append(div);
+			body.appendChild(div);
 		}
 	});
 });

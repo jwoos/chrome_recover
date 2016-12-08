@@ -1,6 +1,4 @@
 'use strict';
 
-/*
- *const utils = window.FORMSAFE.utils;
- *const polymer = Polymer.Base;
- */
+import * as _ from 'lodash';
+import * as utils from './utils';

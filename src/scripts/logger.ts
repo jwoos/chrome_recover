@@ -1,37 +1,27 @@
 'use strict';
 
-window.FORMSAFE = window.FORMSAFE || {};
+const logs: Array<Array<any>> = [];
 
-window.FORMSAFE.logs = [];
-
-/* eslint-disable no-console */
-window.FORMSAFE.logger = {
-	log: (...args) => {
-		console.log('FORMSAFE [LOG]:', ...args);
-		window.FORMSAFE.logs.push([new Date(), ...args]);
-	},
-
-	error: (...args) => {
-		console.error('FORMSAMFE [ERROR]:', ...args);
-		window.FORMSAFE.logs.push([new Date(), ...args]);
-	},
-
-	warn: (...args) => {
-		console.warn('FORMSAMFE [WARNING]:', ...args);
-		window.FORMSAFE.logs.push([new Date(), ...args]);
-	},
-
-	info: (...args) => {
-		console.info('FORMSAMFE [INFO]:', ...args);
-		window.FORMSAFE.logs.push([new Date(), ...args]);
-	},
-
-	trace: () => {
-		console.trace('FORMSAFE [TRACE]:');
-	},
-
-	memory: () => {
-		console.log(console.memory);
-	}
+export const log = (...args: Array<any>): void => {
+	console.log('FORMSAFE [LOG]:', ...args);
+	logs.push([new Date(), ...args]);
 };
-/* eslint-enable no-console */
+
+export const error = (...args: Array<any>): void => {
+	console.error('FORMSAMFE [ERROR]:', ...args);
+	logs.push([new Date(), ...args]);
+};
+
+export const warn = (...args: Array<any>): void => {
+	console.warn('FORMSAMFE [WARNING]:', ...args);
+	logs.push([new Date(), ...args]);
+};
+
+export const info = (...args: Array<any>): void => {
+	console.info('FORMSAMFE [INFO]:', ...args);
+	logs.push([new Date(), ...args]);
+};
+
+export const trace = (): void => {
+	console.trace('FORMSAFE [TRACE]:');
+};
