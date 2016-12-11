@@ -9,7 +9,7 @@ const visibleInputs = Array.from(document.querySelectorAll('input')).filter((ele
 	return utils.isVisible(elem) && utils.checkAttributes(elem, config);
 });
 
-const visibleTextAreas = Array.from(document.querySelectorAll('textarea')).filter((elem) => {
+const visibleTextAreas: Array<HTMLElement> = Array.from(document.querySelectorAll('textarea')).filter((elem) => {
 	const config = {
 		readonly: ['', 'true'],
 	};
