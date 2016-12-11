@@ -11,7 +11,7 @@ fi
 tobuild=""
 env=""
 from="src"
-to=""
+env=""
 
 if [[ $1 == "popup" ]]; then
 	tobuild=("popup")
@@ -23,18 +23,16 @@ fi
 
 if [[ $# -lt 2 ]] || [[ $2 == "srv" ]]; then
 	env="srv"
-	to="tmp"
 elif [[ $2 == "dist" ]]; then
 	env="dist"
-	to="dist"
 fi
 
 # try to create path
-mkdir -p ${to}/scripts/
+mkdir -p build/${env}/scripts/
 
 for file in "${tobuild[@]}"; do
 	vulcanize --inline-scripts --strip-comments --exclude "src/scripts/" "${from}/${file}.html" |\
-		crisper --html "${to}/${file}.html" --js "${to}/scripts/${file}.csp.js" --only-split
+		crisper --html "build/${env}/${file}.html" --js "build/${env}/scripts/${file}.csp.js" --only-split
 
 	temp=("${PIPESTATUS[@]}")
 	if [ ${temp[0]} -ne 0 ]; then

@@ -26,7 +26,7 @@ const tsPathsPlugin = atl.TsConfigPathsPlugin;
 
 gulp.task('init:srv', () => {
 	return new Promise((resolve, reject) => {
-		childProcess.exec('if [ ! -d tmp ]; then mkdir tmp; fi', (e) => {
+		childProcess.exec('if [ ! -d dist/srv ]; then mkdir build/srv; fi', (e) => {
 			e ? reject() : resolve();
 		});
 	});
@@ -34,14 +34,14 @@ gulp.task('init:srv', () => {
 
 gulp.task('init:dist', () => {
 	return new Promise((resolve, reject) => {
-		childProcess.exec('if [ ! -d dist ]; then mkdir dist; fi', (e) => {
+		childProcess.exec('if [ ! -d build/dist ]; then mkdir buid/dist; fi', (e) => {
 			e ? reject() : resolve();
 		});
 	});
 });
 
 gulp.task('clean:srv', () => {
-	return del(['tmp/**/*']);
+	return del(['srv/**/*']);
 });
 
 gulp.task('clean:dist', () => {
@@ -62,26 +62,26 @@ gulp.task('tslint', () => {
 gulp.task('assets:srv', () => {
 	return gulp.src(['./src/assets/**/*', '!images/'])
 		.pipe(plumber())
-		.pipe(gulp.dest('./tmp/assets/'));
+		.pipe(gulp.dest('./build/srv/assets/'));
 });
 
 gulp.task('assets:dist', () => {
 	return gulp.src(['./src/assets/**/*', '!images/'])
 		.pipe(plumber())
-		.pipe(gulp.dest('./dist/assets/'));
+		.pipe(gulp.dest('./build/dist/assets/'));
 });
 
 gulp.task('images:srv', () => {
 	return gulp.src(['./src/assets/images/**/*'])
 		.pipe(plumber())
-		.pipe(gulp.dest('./tmp/assets/'));
+		.pipe(gulp.dest('./build/srv/assets/'));
 });
 
 gulp.task('images:dist', () => {
 	return gulp.src(['./src/assets/images/**/*'])
 		.pipe(plumber())
 		.pipe(imagemin())
-		.pipe(gulp.dest('./dist/assets/'));
+		.pipe(gulp.dest('./build/dist/assets/'));
 });
 
 gulp.task('polybuild:srv', () => {
@@ -104,7 +104,7 @@ gulp.task('polybuild:dist', () => {
 gulp.task('js:srv', () => {
 	return gulp.src(['./src/scripts/**/*.js'])
 		.pipe(plumber())
-		.pipe(gulp.dest('./tmp/scripts/'));
+		.pipe(gulp.dest('./build/srv/scripts/'));
 });
 
 // TODO get rid of comments
@@ -114,14 +114,14 @@ gulp.task('js:dist', () => {
 		.pipe(babel({
 			presets: ['babili']
 		}))
-		.pipe(gulp.dest('./dist/scripts/'));
+		.pipe(gulp.dest('./build/dist/scripts/'));
 });
 
 gulp.task('ts:srv', () => {
 	return gulp.src(['./src/scripts/**/*.ts'])
 		.pipe(plumber())
 		.pipe(tsProject())
-		.js.pipe(gulp.dest('./tmp/scripts/'));
+		.js.pipe(gulp.dest('./build/srv/scripts/'));
 });
 
 gulp.task('ts:dist', () => {
@@ -131,7 +131,7 @@ gulp.task('ts:dist', () => {
 		.js.pipe(babel({
 			presets: ['babili']
 		}))
-		.pipe(gulp.dest('./dist/scripts/'));
+		.pipe(gulp.dest('./build/dist/scripts/'));
 });
 
 gulp.task('css:srv', () => {
@@ -142,7 +142,7 @@ gulp.task('css:srv', () => {
 			outputStyle: 'expanded'
 		}).on('error', sass.logError))
 		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest('./tmp/style/'));
+		.pipe(gulp.dest('./build/srv/style/'));
 });
 
 gulp.task('css:dist', () => {
@@ -151,19 +151,19 @@ gulp.task('css:dist', () => {
 		.pipe(sass({
 			outputStyle: 'compressed'
 		}).on('error', sass.logError))
-		.pipe(gulp.dest('./dist/style/'));
+		.pipe(gulp.dest('./build/dist/style/'));
 });
 
 gulp.task('copy:srv', () => {
 	return gulp.src(['./manifest.json'])
 		.pipe(plumber())
-		.pipe(gulp.dest('./tmp/'));
+		.pipe(gulp.dest('./build/srv/'));
 });
 
 gulp.task('copy:dist', () => {
 	return gulp.src(['./manifest.json'])
 		.pipe(plumber())
-		.pipe(gulp.dest('./dist/'));
+		.pipe(gulp.dest('./build/dist/'));
 });
 
 gulp.task('vendor', () => {
@@ -233,7 +233,7 @@ gulp.task('webpack:srv', () => {
 								loader: 'babel-loader',
 								options: {
 									presets: ['babili'],
-									cacheDirectory: ['.tmp/babel/']
+									cacheDirectory: ['.srv/babel/']
 								}
 							}
 						],
@@ -271,7 +271,7 @@ gulp.task('webpack:srv', () => {
 				warnings: true
 			}
 		}, wp))
-		.pipe(gulp.dest('./tmp/scripts/'));
+		.pipe(gulp.dest('./build/srv/scripts/'));
 });
 
 gulp.task('webpack:dist', () => {
@@ -315,7 +315,7 @@ gulp.task('webpack:dist', () => {
 								loader: 'babel-loader',
 								options: {
 									presets: ['babili'],
-									cacheDirectory: ['.tmp/babel/']
+									cacheDirectory: ['.srv/babel/']
 								}
 							}
 						],
@@ -356,7 +356,7 @@ gulp.task('webpack:dist', () => {
 		.pipe(babel({
 			presets: ['babili']
 		}))
-		.pipe(gulp.dest('./dist/scripts/'));
+		.pipe(gulp.dest('./build/dist/scripts/'));
 });
 
 gulp.task('_srv', gulp.parallel('copy:srv', 'polybuild:srv', 'webpack:srv', 'css:srv', 'js:srv', 'ts:srv', 'images:srv', 'assets:srv'));
@@ -378,14 +378,14 @@ gulp.task('html:srv', () => {
 		.pipe(pug({
 			pretty: '\t'
 		}))
-		.pipe(gulp.dest('./tmp/'));
+		.pipe(gulp.dest('./build/srv/'));
 });
 
 gulp.task('html:dist', () => {
 	gulp.src(['./src/*.pug'])
 		.pipe(plumber())
 		.pipe(pug())
-		.pipe(gulp.dest('./dist/'));
+		.pipe(gulp.dest('./build/dist/'));
 });
 
 gulp.task('eslint', () => {

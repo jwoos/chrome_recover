@@ -6,3 +6,4 @@ tmp/
 dist/
 coverage/
 .vscode/
+build/
