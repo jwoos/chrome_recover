@@ -9,7 +9,7 @@ module.exports = (deps, config) => {
 		gulp.task(`assets:${env}`, () => {
 			return gulp.src(['./src/assets/**/*', '!images/'])
 				.pipe(plumber())
-				.pipe(gulp.dest('./build/${env}/assets/'));
+				.pipe(gulp.dest(`./build/${env}/assets/`));
 		});
 	});
 
