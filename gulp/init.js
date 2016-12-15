@@ -7,7 +7,7 @@ module.exports = (deps, config) => {
 	config.envs.forEach((env) => {
 		gulp.task(`init:${env}`, () => {
 			return new Promise((resolve, reject) => {
-				childProcess.exec(`if [ ! -d dist/${env} ]; then mkdir build/${env}; fi`, (e) => {
+				childProcess.exec(`if [ ! -d build/${env} ]; then mkdir build/${env}; fi`, (e) => {
 					e ? reject() : resolve();
 				});
 			});
