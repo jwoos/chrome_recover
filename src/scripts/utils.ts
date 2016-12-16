@@ -1,5 +1,13 @@
 import {InterfaceEventListener, InterfaceEventOptions, InterfaceVisibleFnConfig} from './interfaces';
 
+export const domReady = (): Promise<void> => {
+	return new Promise((resolve) => {
+		document.addEventListener('DOMContentLoaded', () => {
+			resolve();
+		});
+	});
+};
+
 export const isVisible = (elem: Element): boolean => {
 	if (!elem || !elem.nodeName) {
 		return false;
