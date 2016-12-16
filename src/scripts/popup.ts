@@ -3,7 +3,7 @@ import {InterfaceEventListener, InterfaceEventOptions, InterfaceVisibleFnConfig}
 import * as _ from 'lodash';
 import * as utils from './utils';
 
-document.addEventListener('DOMContentLoaded', () => {
+domReady().then(() => {
 	const body: HTMLElement = document.querySelector('body');
 
 	utils.getCurrentTabUrl().then((url: string) => {
