@@ -35,9 +35,9 @@ dependencies.fs.readdirSync('gulp').forEach((module) => {
 	require(`./gulp/${module}`)(dependencies, config);
 });
 
-gulp.task('_srv', gulp.parallel('copy:srv', 'polybuild:srv', 'webpack:srv', 'css:srv', 'js:srv', 'ts:srv', 'images:srv', 'assets:srv'));
+gulp.task('_srv', gulp.parallel('copy:srv', 'webpack:srv', 'pug:srv', 'sass:srv', 'images:srv', 'assets:srv'));
 gulp.task('srv', gulp.series('init:srv', 'clean:srv', 'tslint', '_srv'));
 gulp.task('default', gulp.series('srv'));
 
-gulp.task('_dist', gulp.parallel('copy:dist', 'polybuild:dist', 'webpack:dist', 'css:dist', 'js:dist', 'ts:dist', 'images:dist', 'assets:dist'));
+gulp.task('_dist', gulp.parallel('copy:dist', 'webpack:dist', 'pug:dist', 'sass:dist', 'images:dist', 'assets:dist'));
 gulp.task('dist', gulp.series('init:dist', 'clean:dist', 'tslint', '_dist'));
