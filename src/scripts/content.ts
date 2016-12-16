@@ -1,3 +1,5 @@
+import {InterfaceEventListener, InterfaceEventOptions, InterfaceVisibleFnConfig} from './interfaces';
+
 import * as _ from 'lodash';
 import * as utils from './utils';
 
@@ -9,7 +11,7 @@ const visibleInputs = Array.from(document.querySelectorAll('input')).filter((ele
 	return utils.isVisible(elem) && utils.checkAttributes(elem, config);
 });
 
-const visibleTextAreas: Array<HTMLElement> = Array.from(document.querySelectorAll('textarea')).filter((elem) => {
+const visibleTextAreas: Array<HTMLElement> = Array.from(document.querySelectorAll('textarea')).filter((elem: HTMLElement): boolean => {
 	const config = {
 		readonly: ['', 'true'],
 	};
@@ -17,7 +19,7 @@ const visibleTextAreas: Array<HTMLElement> = Array.from(document.querySelectorAl
 	return utils.isVisible(elem) && utils.checkAttributes(elem, config);
 });
 
-const visibleEditableElements = Array.from(document.querySelectorAll('div[contenteditable]')).filter((elem) => {
+const visibleEditableElements: Array<HTMLElement> = Array.from(<NodeListOf<HTMLElement>>document.querySelectorAll('div[contenteditable]')).filter((elem: HTMLElement): boolean => {
 	const config = {
 		contenteditable: [null, 'false'],
 	};
@@ -25,13 +27,13 @@ const visibleEditableElements = Array.from(document.querySelectorAll('div[conten
 	return utils.isVisible(elem) && utils.checkAttributes(elem, config);
 });
 
-const allForms = Array.prototype.concat(visibleInputs, visibleTextAreas, visibleEditableElements);
+const allForms: Array<HTMLElement> = Array.prototype.concat(visibleInputs, visibleTextAreas, visibleEditableElements);
 
-const events = [];
+const events: Array<InterfaceEventListener> = [];
 
-const hostname = window.location.hostname;
+const hostname: string = window.location.hostname;
 
-allForms.forEach((elem, index) => {
+allForms.forEach((elem: HTMLInputElement, index: number) => {
 	const fn = _.debounce(() => {
 		const root = Object.create(null);
 
@@ -47,18 +49,18 @@ allForms.forEach((elem, index) => {
 		});
 	}, 750);
 
-	const options = {
+	const options: InterfaceEventOptions = {
 		capture: true,
 		usePassive: true,
 	};
 
-	const type = 'input';
+	const eventType: string = 'input';
 
-	elem.addEventListener(type, fn, options);
+	elem.addEventListener(eventType, fn, options);
 
 	const tracker = Object.create(null);
 	tracker.fn = fn;
-	tracker.type = type;
+	tracker.eventType = eventType;
 	tracker.options = options;
 
 	events.push(tracker);

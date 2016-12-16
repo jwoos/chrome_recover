@@ -1,18 +1,20 @@
+import {InterfaceEventListener, InterfaceEventOptions, InterfaceVisibleFnConfig} from './interfaces';
+
 import * as _ from 'lodash';
 import * as utils from './utils';
 
 document.addEventListener('DOMContentLoaded', () => {
-	const body = document.querySelector('body');
+	const body: HTMLElement = document.querySelector('body');
 
-	utils.getCurrentTabUrl().then((url) => {
+	utils.getCurrentTabUrl().then((url: string) => {
 		document.querySelector('div').textContent = url;
 	});
 
-	utils.storageGet(null).then((data) => {
-		const hostnames = Object.keys(data);
+	utils.storageGet(null).then((data: Object) => {
+		const hostnames: Array<string> = Object.keys(data);
 
 		for (let hostname of hostnames) {
-			const hostData = data[hostname];
+			const hostData: Object = data[hostname];
 			const div = document.createElement('div');
 			div.setAttribute('data-hostname', hostname);
 			div.textContent = `hostname: ${hostname}\n` + JSON.stringify(hostData);

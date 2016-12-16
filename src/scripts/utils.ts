@@ -1,10 +1,12 @@
+import {InterfaceEventListener, InterfaceEventOptions, InterfaceVisibleFnConfig} from './interfaces';
+
 export const isVisible = (elem: Element): boolean => {
 	if (!elem || !elem.nodeName) {
 		return false;
 	}
 
 	const boundingRect = elem.getBoundingClientRect();
-	const keys: [string] = [
+	const keys: Array<string> = [
 		'bottom',
 		'height',
 		'left',
@@ -13,13 +15,15 @@ export const isVisible = (elem: Element): boolean => {
 		'width',
 	];
 
+	let visible: boolean = false;
+
 	for (let prop of keys) {
 		if (boundingRect[prop]) {
-			return true;
+			visible = true;
 		}
 	}
 
-	return false;
+	return visible;
 };
 
 export const getCurrentTabUrl = (): Promise<string> => {
@@ -30,7 +34,7 @@ export const getCurrentTabUrl = (): Promise<string> => {
 		};
 
 		chrome.tabs.query(queryInfo, (tabs) => {
-			const url = tabs[0].url;
+			const url: string = tabs[0].url;
 
 			if (typeof url === 'string') {
 				resolve(url);
@@ -88,8 +92,8 @@ export const getDomain = (link: string): string => {
 	return matches[1];
 };
 
-export const checkAttributes = (elem: Element, config) => {
-	let status = true;
+export const checkAttributes = (elem: Element, config): boolean => {
+	let status: boolean = true;
 
 	const attributes = Object.keys(config);
 
