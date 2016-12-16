@@ -18,7 +18,7 @@ module.exports = (deps, config) => {
 		devtool: 'source-map',
 		resolve: {
 			extensions: ['.js', '.ts'],
-			modules: [path.resolve(__dirname, 'src'), 'node_modules']
+			modules: [path.resolve(__dirname, 'src'), 'node_modules', 'bower_components']
 		},
 		resolveLoader: {
 			modules: ['node_modules']

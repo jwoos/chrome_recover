@@ -5,8 +5,16 @@ module.exports = (deps, config) => {
 	const plumber = deps.plumber;
 	const pug     = deps.pug;
 
-	gulp.task('html:srv', () => {
-		gulp.src(['./src/*.pug'])
+	config.envs.forEach((env) => {
+		return gulp.task(`html:${env}`, () => {
+			return gulp.src(['./src/*.html'])
+				.pipe(plumber())
+				.pipe(gulp.dest(`./build/${env}/`));
+		});
+	});
+
+	gulp.task('pug:srv', () => {
+		return gulp.src(['./src/*.pug'])
 			.pipe(plumber())
 			.pipe(pug({
 				pretty: '\t'
@@ -14,8 +22,8 @@ module.exports = (deps, config) => {
 			.pipe(gulp.dest('./build/srv/'));
 	});
 
-	gulp.task('html:dist', () => {
-		gulp.src(['./src/*.pug'])
+	gulp.task('pug:dist', () => {
+		return gulp.src(['./src/*.pug'])
 			.pipe(plumber())
 			.pipe(pug())
 			.pipe(gulp.dest('./build/dist/'));

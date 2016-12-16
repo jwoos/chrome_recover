@@ -6,7 +6,15 @@ module.exports = (deps, config) => {
 	const sourcemaps = deps.sourcemaps;
 	const sass       = deps.sass;
 
-	gulp.task('css:srv', () => {
+	config.envs.forEach((env) => {
+		gulp.task(`css:${env}`, () => {
+			return gulp.src(['./src/style/**/*.css'])
+				.pipe(plumber())
+				.pipe(gulp.dest(`./build/${env}/`));
+		});
+	});
+
+	gulp.task('sass:srv', () => {
 		return gulp.src(['./src/style/*.scss'])
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
@@ -17,7 +25,7 @@ module.exports = (deps, config) => {
 			.pipe(gulp.dest('./build/srv/style/'));
 	});
 
-	gulp.task('css:dist', () => {
+	gulp.task('sass:dist', () => {
 		return gulp.src(['./src/style/*.scss'])
 			.pipe(plumber())
 			.pipe(sass({

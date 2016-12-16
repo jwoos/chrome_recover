@@ -22,6 +22,10 @@
   version "0.0.28"
   resolved "https://registry.yarnpkg.com/@types/filewriter/-/filewriter-0.0.28.tgz#c054e8af4d9dd75db4e63abc76f885168714d4b3"
 
+"@types/jquery@*":
+  version "2.0.34"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-2.0.34.tgz#27615b369f30e572336126514e74672dda6e3d04"
+
 "@types/lodash@^4.14.43":
   version "4.14.43"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.43.tgz#0373de422e70f5bce12c15340103a3c126c81086"
@@ -45,6 +49,12 @@
   resolved "https://registry.yarnpkg.com/@types/polymer/-/polymer-1.1.29.tgz#b59c53f312a9b54f46c928dffb07b95a86f740b8"
   dependencies:
     "@types/webcomponents.js" "*"
+
+"@types/rivets@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@types/rivets/-/rivets-0.0.27.tgz#948429c3f3ae99688e47fec91acb139493176b5a"
+  dependencies:
+    "@types/jquery" "*"
 
 "@types/webcomponents.js@*":
   version "0.6.30"
