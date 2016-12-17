@@ -5,39 +5,42 @@ import * as rivets from 'rivets';
 
 import * as utils from './utils';
 
-domReady().then(() => {
+utils.domReady().then(() => {
 	const body: HTMLElement = document.querySelector('body');
+	const dataReady = [];
 
-	utils.getCurrentTabUrl().then((url: string) => {
-		document.querySelector('div').textContent = url;
-	});
+	let url: string;
+	dataReady.push(
+		utils.getCurrentTabUrl().then((queriedUrl: string) => {
+			url = queriedUrl;
+		}),
+	);
 
-	utils.storageGet(null).then((data: Object) => {
-		const hostnames: Array<string> = Object.keys(data);
+	let texts: Array<Object | void> = [];
+	dataReady.push(
+		utils.storageGet(null).then((textData: Object) => {
+			const hostnames: Array<string> = Object.keys(textData);
 
-		for (let hostname of hostnames) {
-			const hostData: Object = data[hostname];
-			const div = document.createElement('div');
-			div.setAttribute('data-hostname', hostname);
-			div.textContent = `hostname: ${hostname}\n` + JSON.stringify(hostData);
+			for (let hostname of hostnames) {
+				const hostData = {
+					destroy: (ev: Event, view: View) => {
+						textData[hostname] = null;
 
-			// doesn't update properly
-			div.addEventListener('click', () => {
-				data[hostname] = null;
+						utils.storageSet(textData).then(() => {
+							console.log('deleted');
+						});
+					},
+					domain: hostname,
+					text: JSON.stringify(textData[hostname]),
+				};
 
-				console.log(data);
+				texts.push(hostData);
+			}
+		}),
+	);
 
-				utils.storageSet(data).then(() => {
-					console.log(data);
-					console.log('Deleted hostname!');
-				});
-			}, {
-				capture: true,
-				once: true,
-				passive: true,
-			});
-
-			body.appendChild(div);
-		}
+	Promise.all(dataReady).then(() => {
+		const rv: View = rivets.bind(body, {url, texts});
+		console.log(rv);
 	});
 });

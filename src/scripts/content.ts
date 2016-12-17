@@ -19,7 +19,7 @@ const visibleTextAreas: Array<HTMLElement> = Array.from(document.querySelectorAl
 	return utils.isVisible(elem) && utils.checkAttributes(elem, config);
 });
 
-const visibleEditableElements: Array<HTMLElement> = Array.from(<NodeListOf<HTMLElement>>document.querySelectorAll('div[contenteditable]')).filter((elem: HTMLElement): boolean => {
+const visibleEditableElements: Array<HTMLElement> = Array.from(<NodeListOf<HTMLElement>> document.querySelectorAll('div[contenteditable]')).filter((elem: HTMLElement): boolean => {
 	const config = {
 		contenteditable: [null, 'false'],
 	};

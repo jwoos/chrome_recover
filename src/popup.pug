@@ -2,8 +2,16 @@ doctype html
 html(lang='en')
 	head
 		meta(charset='utf-8')
+
 		link(rel='stylesheet', href='style/popup.css')
 	body
 		div
+			h3
+				| {url}
+		div(rv-each-text='texts')
+			p
+				| {text.domain}
+			p(rv-on-click='text.destroy')
+				| {text.text}
 
 		script(src='scripts/popup.js')
