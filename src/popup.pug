@@ -2,8 +2,22 @@ doctype html
 html(lang='en')
 	head
 		meta(charset='utf-8')
+
 		link(rel='stylesheet', href='style/popup.css')
 	body
-		div
+		div.container-fluid
+			div.row.url-container
+				div.col-sm.layout.vertical.center-center
+					h3
+						| {hostname}
+
+			div.row.data-container
+				div.col-sm.data-row(rv-each-field='fields', rv-on-click='field.destroy')
+					div.row
+						div.col-sm
+							p
+								| {field.key}
+							p
+								| {field.text}
 
 		script(src='scripts/popup.js')

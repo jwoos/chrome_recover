@@ -1,15 +1,25 @@
 export interface InterfaceEventOptions {
 	capture?: boolean;
-	usePassive?: boolean;
 	once?: boolean;
+	usePassive?: boolean;
 }
 
 export interface InterfaceEventListener {
-	fn: any; // how to type functions?
 	eventType: string;
+	fn: any; // FIXME how to type functions?
 	options: InterfaceEventOptions;
 }
 
 export interface InterfaceVisibleFnConfig {
 	[propName: string]: Array<string>;
+}
+
+export interface InterfaceRivetsConfig {
+	executeFunctions?: boolean;
+	handler?: any;
+	iterationAlias?: any;
+	prefix?: string;
+	preloadData?: boolean;
+	rootInterface?: string;
+	templateDelimiters?: string;
 }
