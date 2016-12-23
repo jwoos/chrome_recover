@@ -1,12 +1,13 @@
 'use strict';
 
 module.exports = (deps, config) => {
-	const gulp    = deps.gulp;
-	const plumber = deps.plumber;
-	const webpack = deps.webpack;
-	const wp      = deps.wp;
-	const babel   = deps.babel;
-	const path    = deps.path;
+	const gulp       = deps.gulp;
+	const plumber    = deps.plumber;
+	const webpack    = deps.webpack;
+	const wp         = deps.wp;
+	const babel      = deps.babel;
+	const path       = deps.path;
+	const sourcemaps = deps.sourcemaps;
 
 	const webpackConfig = {
 		entry: {
@@ -96,7 +97,8 @@ module.exports = (deps, config) => {
 			.pipe(plumber())
 			.pipe(webpack(webpackConfig, wp))
 			.pipe(babel({
-				presets: ['babili']
+				presets: ['babili'],
+				ignore: '*.js.map'
 			}))
 			.pipe(gulp.dest('./build/dist/scripts/'));
 	});

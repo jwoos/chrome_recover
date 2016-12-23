@@ -16,6 +16,7 @@ const dependencies = {
 	del: require('del'),
 	eslint: require('gulp-eslint'),
 	imagemin: require('gulp-imagemin'),
+	mergeStream: require('merge-stream'),
 	plumber: require('gulp-plumber'),
 	pug: require('gulp-pug'),
 	sass: require('gulp-sass'),

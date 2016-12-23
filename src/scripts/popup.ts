@@ -22,19 +22,15 @@ utils.domReady().then(() => {
 	rivets.configure(rivetsConfig);
 
 	const body: HTMLElement = document.querySelector('body');
-	const dataReady = [];
 
 	let fullData: Object = {};
 	let hostname: string;
 	const fields: Array<Object> = [];
 
-	dataReady.push(
+	const dataReady = [
 		utils.getCurrentTabUrl().then((queriedUrl: string) => {
 			hostname = utils.getDomain(queriedUrl);
 		}),
-	);
-
-	dataReady.push(
 		utils.storageGet(null).then((textData: Object) => {
 			fullData = textData;
 
@@ -58,7 +54,7 @@ utils.domReady().then(() => {
 				fields.push(temp);
 			}
 		}),
-	);
+	];
 
 	Promise.all(dataReady).then(() => {
 		const rv: View = rivets.bind(body, {hostname, fields});
