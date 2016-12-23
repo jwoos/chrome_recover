@@ -1,4 +1,4 @@
-import {InterfaceEventListener, InterfaceEventOptions, InterfaceVisibleFnConfig} from './interfaces';
+import * as interfaces from './interfaces';
 
 import * as _ from 'lodash';
 import * as rivets from 'rivets';
@@ -6,41 +6,61 @@ import * as rivets from 'rivets';
 import * as utils from './utils';
 
 utils.domReady().then(() => {
+	const rivetsConfig: interfaces.InterfaceRivetsConfig = {
+		executeFunctions: false,
+		// TODO figure out how to use arrow function
+		handler: function(target, event, binding) {
+			this.call(target, event, binding.view.models, target);
+		},
+		iterationAlias: (modelName: string): string => `%${modelName}%`,
+		prefix: 'rv',
+		preloadData: true,
+		rootInterface: '.',
+		templateDelimiters: '{}'.split(''),
+	};
+
+	rivets.configure(rivetsConfig);
+
 	const body: HTMLElement = document.querySelector('body');
 	const dataReady = [];
 
-	let url: string;
+	let fullData: Object = {};
+	let hostname: string;
+	const fields: Array<Object> = [];
+
 	dataReady.push(
 		utils.getCurrentTabUrl().then((queriedUrl: string) => {
-			url = queriedUrl;
+			hostname = utils.getDomain(queriedUrl);
 		}),
 	);
 
-	let texts: Array<Object | void> = [];
 	dataReady.push(
 		utils.storageGet(null).then((textData: Object) => {
-			const hostnames: Array<string> = Object.keys(textData);
+			fullData = textData;
 
-			for (let hostname of hostnames) {
-				const hostData = {
-					destroy: (ev: Event, view: View) => {
-						textData[hostname] = null;
+			const domainData: Object = textData[hostname] || {};
+			const fieldKeys: Array<string> = Object.keys(domainData);
 
-						utils.storageSet(textData).then(() => {
-							console.log('deleted');
+			for (let fk of fieldKeys) {
+				const temp = {
+					destroy: (ev: Event, view: View, target: HTMLElement) => {
+						delete domainData[fk];
+
+						// does the fields array have to be updated?
+						utils.storageSet(fullData).then(() => {
+							target.remove();
 						});
 					},
-					domain: hostname,
-					text: JSON.stringify(textData[hostname]),
+					key: fk,
+					text: domainData[fk],
 				};
 
-				texts.push(hostData);
+				fields.push(temp);
 			}
 		}),
 	);
 
 	Promise.all(dataReady).then(() => {
-		const rv: View = rivets.bind(body, {url, texts});
-		console.log(rv);
+		const rv: View = rivets.bind(body, {hostname, fields});
 	});
 });

@@ -45,7 +45,7 @@ allForms.forEach((elem: HTMLInputElement, index: number) => {
 		}).then(() => {
 			console.log('saved');
 		}).catch((e) => {
-			console.log(e);
+			console.error(e);
 		});
 	}, 750);
 

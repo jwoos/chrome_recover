@@ -1,14 +1,33 @@
 @import '../../bower_components/bootstrap/scss/bootstrap-flex';
 
+@import 'flex';
+@import 'reset';
 @import 'variables';
 
 body {
 	overflow: hidden;
-	max-width: 500px;
-	min-width: 300px;
+	width: $POPUP_WIDTH;
+	max-width: $POPUP_WIDTH;
+	height: $POPUP_HEIGHT;
+	max-height: $POPUP_HEIGHT;
 }
 
-div[data-hostname] {
+div.container-fluid {
+	height: 100%;
+}
+
+div.url-container {
+	height: $URL_HEIGHT;
+	background-color: $BLUE;
+}
+
+div.data-container {
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: $DATA_HEIGHT;
+}
+
+div.data-row {
 	transition: background-color linear 0.2s;
 
 	&:hover {
