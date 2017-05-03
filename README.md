@@ -1,7 +1,4 @@
 # FormSafe
-[![Build Status](https://travis-ci.org/jwoos/formsafe.svg?branch=master)](https://travis-ci.org/jwoos/formsafe)
-[![Dependency Status](https://dependencyci.com/github/jwoos/formsafe/badge)](https://dependencyci.com/github/jwoos/formsafe)
-[![Coverage Status](https://coveralls.io/repos/github/jwoos/formsafe/badge.svg?branch=master)](https://coveralls.io/github/jwoos/formsafe?branch=master)
 
 Form recovery extension
 
